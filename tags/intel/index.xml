@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Intel on Tiny Rick Blog</title>
+        <link>https://www.zhangyaoke.com/tags/intel/</link>
+        <description>Recent content in Intel on Tiny Rick Blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <lastBuildDate>Wed, 09 Mar 2022 11:42:18 +0800</lastBuildDate><atom:link href="https://www.zhangyaoke.com/tags/intel/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>WIndows10  12代CPU大小核心调度更改</title>
+        <link>https://www.zhangyaoke.com/p/windows10-12%E4%BB%A3cpu%E5%A4%A7%E5%B0%8F%E6%A0%B8%E5%BF%83%E8%B0%83%E5%BA%A6%E6%9B%B4%E6%94%B9/</link>
+        <pubDate>Wed, 09 Mar 2022 11:42:18 +0800</pubDate>
+        
+        <guid>https://www.zhangyaoke.com/p/windows10-12%E4%BB%A3cpu%E5%A4%A7%E5%B0%8F%E6%A0%B8%E5%BF%83%E8%B0%83%E5%BA%A6%E6%9B%B4%E6%94%B9/</guid>
+        <description>&lt;h2 id=&#34;windows10--12代cpu大小核心调度更改&#34;&gt;WIndows10  12代CPU大小核心调度更改&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;查看本机电源性能选项，导出txt：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;powercfg /Qh &amp;gt; PowerPlanSettingsHidden.txt&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;查看电源选项的GUID：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;(生效的异类策略)&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;(异类线程调度策略)&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;(异类短运行线程调度策略)&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;(SMT 线程启动策略)&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;取消隐藏：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;powercfg -attributes SUB_PROCESSOR [上面获取的GUID] -ATTRIB_HIDE&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;控制面板更改电源选项：&lt;/p&gt;
+&lt;p&gt;处理器电源管理&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生效的异类策略
+&lt;ul&gt;
+&lt;li&gt;使用异类策略0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;最小处理器
+&lt;ul&gt;
+&lt;li&gt;100%&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;线程调度策略
+&lt;ul&gt;
+&lt;li&gt;首选高性能处理器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;SMT线程启动
+&lt;ul&gt;
+&lt;li&gt;核心&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;异类短运行线程调度策略
+&lt;ul&gt;
+&lt;li&gt;首选高性能&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;最大处理器
+&lt;ul&gt;
+&lt;li&gt;100%&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

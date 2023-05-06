@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>RabbitMQ on Tiny Rick Blog</title>
+        <link>https://www.zhangyaoke.com/tags/rabbitmq/</link>
+        <description>Recent content in RabbitMQ on Tiny Rick Blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <lastBuildDate>Wed, 09 Mar 2022 11:42:18 +0800</lastBuildDate><atom:link href="https://www.zhangyaoke.com/tags/rabbitmq/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>RabbitMQ-Python使用记录</title>
+        <link>https://www.zhangyaoke.com/p/rabbitmq-python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</link>
+        <pubDate>Wed, 09 Mar 2022 11:42:18 +0800</pubDate>
+        
+        <guid>https://www.zhangyaoke.com/p/rabbitmq-python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</guid>
+        <description>&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Python相关链接：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/guyuyun/p/14970592.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Python三方库：Pika（RabbitMQ基础使用） - 山上下了雪-bky - 博客园 (cnblogs.com)&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Docker部署相关链接：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://juejin.cn/post/7198430801850105916&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Docker安装部署RabbitMQ - 掘金 (juejin.cn)&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

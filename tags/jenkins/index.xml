@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Jenkins on Tiny Rick Blog</title>
+        <link>https://www.zhangyaoke.com/tags/jenkins/</link>
+        <description>Recent content in Jenkins on Tiny Rick Blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <lastBuildDate>Tue, 13 Apr 2021 22:46:41 +0800</lastBuildDate><atom:link href="https://www.zhangyaoke.com/tags/jenkins/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Jenkins配置免密ssh远程连接</title>
+        <link>https://www.zhangyaoke.com/p/jenkins%E9%85%8D%E7%BD%AE%E5%85%8D%E5%AF%86ssh%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/</link>
+        <pubDate>Tue, 13 Apr 2021 22:46:41 +0800</pubDate>
+        
+        <guid>https://www.zhangyaoke.com/p/jenkins%E9%85%8D%E7%BD%AE%E5%85%8D%E5%AF%86ssh%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/</guid>
+        <description>&lt;h1 id=&#34;在jenkins主机生成ssh公钥和私钥对&#34;&gt;在Jenkins主机生成ssh公钥和私钥对：&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;`ssh-keygen -t rsa`
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;
+&lt;p&gt;使用&lt;code&gt;ssh-copy-id&lt;/code&gt;将公钥从Jenkins主机复制远程主机：
+&lt;code&gt;ssh-copy-id -i /root/.ssh/id_rsa.pub &amp;quot;root@192.168.10.101&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Jenkins安装&lt;code&gt;Publish over SSH&lt;/code&gt;插件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;打开Jenkins的&lt;code&gt;系统管理&amp;gt;插件管理&lt;/code&gt;，选择&lt;code&gt;可选插件&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;在输入框中输入&lt;code&gt;Publish over SSH&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;进行搜索如果搜索不到可以在&lt;code&gt;已安装&lt;/code&gt;里确认是否已经安装过&lt;/li&gt;
+&lt;li&gt;在搜索结果中选中&lt;code&gt;Publish over SSH&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;点击页面的&lt;code&gt;直接安装&lt;/code&gt;按钮，系统会自动安装&lt;/li&gt;
+&lt;li&gt;此插件安装后&lt;code&gt;不需要重启Jenkins&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;如果插件安装成功在&lt;code&gt;系统管理&amp;gt;系统设置&lt;/code&gt;会出现相关配置项。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;插件安装成功后使用前需要在&lt;code&gt;系统管理&amp;gt;系统设置&lt;/code&gt;中进行配置：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;因为已经同步了公钥，不需要密码即可连接，只需要配置几个选项即可：
+- Name&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Hostname&lt;/li&gt;
+&lt;li&gt;Username&lt;/li&gt;
+&lt;li&gt;Remote Derictory&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在Jenkins中配置构建
+点击&lt;code&gt;构建&lt;/code&gt;选项，在&lt;code&gt;增加构建步骤&lt;/code&gt;里选择&lt;code&gt;Send files or execute commands over SSH&lt;/code&gt;，即可以在Job中使用&lt;code&gt;Publish over SSH&lt;/code&gt;插件&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;参数说明&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Name
+&lt;code&gt;系统管理&amp;gt;系统设置&lt;/code&gt;设置的SSH Sverver的名字列表。&lt;/li&gt;
+&lt;li&gt;Source files
+允许为空，复制到运程机上的文件，相对workspace的路径，也支持表达式，如&lt;code&gt;**/*.war&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Remove prefix
+允许为空，文件复制时要过滤的目录.&lt;/li&gt;
+&lt;li&gt;Remote directory
+允许为空，文件得到到远程机上的目录，此目录是相对于&lt;code&gt;SSH Server&lt;/code&gt;中的&lt;code&gt;Remote directory&lt;/code&gt;的，如果不存在将会自动创建。&lt;/li&gt;
+&lt;li&gt;Exec command
+在这里可以填写在运程机器上执行的shell命令&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;注意&#34;&gt;注意&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ssh-copy-id&lt;/code&gt; 将&lt;code&gt;key&lt;/code&gt;写到远程机器的 &lt;code&gt;.../.ssh/authorized_key&lt;/code&gt;文件中。&lt;/li&gt;
+&lt;li&gt;当然你复制文件到远程服务器也可以用&lt;code&gt;SCP&lt;/code&gt;命令。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

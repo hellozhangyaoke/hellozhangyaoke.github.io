@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>CTF on Tiny Rick Blog</title>
+        <link>https://www.zhangyaoke.com/categories/ctf/</link>
+        <description>Recent content in CTF on Tiny Rick Blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <lastBuildDate>Sun, 07 Feb 2021 21:17:32 +0800</lastBuildDate><atom:link href="https://www.zhangyaoke.com/categories/ctf/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>CTF misc常用解题软件</title>
+        <link>https://www.zhangyaoke.com/p/ctf-misc%E5%B8%B8%E7%94%A8%E8%A7%A3%E9%A2%98%E8%BD%AF%E4%BB%B6/</link>
+        <pubDate>Sun, 07 Feb 2021 21:17:32 +0800</pubDate>
+        
+        <guid>https://www.zhangyaoke.com/p/ctf-misc%E5%B8%B8%E7%94%A8%E8%A7%A3%E9%A2%98%E8%BD%AF%E4%BB%B6/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;在解CTF misc题的时候，好用的工具通常能事半功倍，下面是我在解题过程中常用的软件，这里做个记录。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;图像类&#34;&gt;图像类&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;Stegsolve
+常用的图像类工具，需要Java环境。
+&lt;ul&gt;
+&lt;li&gt;图像文件格式化&lt;/li&gt;
+&lt;li&gt;数据抽取，图片中隐藏数据的抽取&lt;/li&gt;
+&lt;li&gt;帧浏览器，主要针对Gif类动图的分解&lt;/li&gt;
+&lt;li&gt;拼图，图片拼接
+&lt;a class=&#34;link&#34; href=&#34;https://wwa.lanzoui.com/iD6BSsjsa3i&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;点我下载&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;通用文件类&#34;&gt;通用文件类&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;winhex
+应该大家都听过这个软件，是一个&lt;code&gt;十六进制&lt;/code&gt;编辑，&lt;code&gt;磁盘编辑&lt;/code&gt;软件，不多说了。
+&lt;a class=&#34;link&#34; href=&#34;https://wwa.lanzoui.com/iAfg0sjsa6b&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;点我下载&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>CTF misc解题思路笔记(一)</title>
+        <link>https://www.zhangyaoke.com/p/ctf-misc%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E7%AC%94%E8%AE%B0%E4%B8%80/</link>
+        <pubDate>Sun, 07 Feb 2021 21:06:28 +0800</pubDate>
+        
+        <guid>https://www.zhangyaoke.com/p/ctf-misc%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF%E7%AC%94%E8%AE%B0%E4%B8%80/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;最近对渗透安全很有兴趣,了解到CTF比赛刚好正中口味,故记录下学习过程中觉得有用的东西,主要是misc类题目.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;pdf类题目&#34;&gt;PDF类题目&lt;/h2&gt;
+&lt;p&gt;解题思路:
+有很多都是隐写的内容,可以Chrome打开,然后全选复制,粘贴到记事本,看看有没有可疑的内容.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;发现可疑内容可以尝试解密:
+&lt;ul&gt;
+&lt;li&gt;base64&lt;/li&gt;
+&lt;li&gt;rot13&lt;/li&gt;
+&lt;li&gt;摩斯密码&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;对于jar包&#34;&gt;对于jar包&lt;/h2&gt;
+&lt;p&gt;解题思路:
+可以试一下改后缀成压缩包,然后解压缩,到&lt;code&gt;class&lt;/code&gt;文件中查找&lt;code&gt;flag&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;对于gif文件&#34;&gt;对于Gif文件&lt;/h2&gt;
+&lt;p&gt;解题思路
+可以分解&lt;code&gt;Gif&lt;/code&gt;图片,查看分解后的每一帧有没有异样,再根据实际情况去解题&lt;/p&gt;
+&lt;h2 id=&#34;需要补充的知识比较多&#34;&gt;需要补充的知识比较多&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;- 摩斯密码
+- 二维码
+- 密码学
+- 常用文件类型
+- 各类高级语言要略微了解&lt;/code&gt;&lt;/pre&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
