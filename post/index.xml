@@ -6,7 +6,73 @@
         <description>Recent content in Posts on Tiny Rick Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Wed, 09 Mar 2022 11:42:18 +0800</lastBuildDate><atom:link href="https://www.zhangyaoke.com/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 06 May 2023 16:23:59 +0800</lastBuildDate><atom:link href="https://www.zhangyaoke.com/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>屏幕流光溢彩&#43;音频律动</title>
+        <link>https://www.zhangyaoke.com/p/%E5%B1%8F%E5%B9%95%E6%B5%81%E5%85%89%E6%BA%A2%E5%BD%A9-%E9%9F%B3%E9%A2%91%E5%BE%8B%E5%8A%A8/</link>
+        <pubDate>Sat, 06 May 2023 16:23:59 +0800</pubDate>
+        
+        <guid>https://www.zhangyaoke.com/p/%E5%B1%8F%E5%B9%95%E6%B5%81%E5%85%89%E6%BA%A2%E5%BD%A9-%E9%9F%B3%E9%A2%91%E5%BE%8B%E5%8A%A8/</guid>
+        <description>&lt;h2 id=&#34;硬件&#34;&gt;硬件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;主控板&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;主控制板，用来接收信号并控制灯带，任选其一即可&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;ESP32&lt;/li&gt;
+&lt;li&gt;ESP8266&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;灯带&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;WS2812B （60灯珠1米）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;软件&#34;&gt;软件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;WLED&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;WLED是本次项目控制灯带的主要程序，有了WLED，可以通过Web界面以及手机APP来控制灯带的颜色、亮度及效果，同时支持其他APP同步相关颜色参数。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://kno.wled.ge/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Welcome to WLED - WLED Project&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/Aircoookie/WLED&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;官方Github&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Hyperion&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;用来捕获PC屏幕颜色，同时输出相应颜色到WLED，看来达到屏幕流光溢彩的效果。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.hyperion-project.org/en/user/Installation.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Hyperion&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/hyperion-project/hyperion.ng&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;官方Github&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;LedFx&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;接收音频，并即时将音频处理成多个 LED 灯条/矩阵的实时灯光秀，对接WLED从而达到音乐节奏的光律动。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.ledfx.app/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;LedFx&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/ledfx/ledfx&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;官方Github&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>RabbitMQ-Python使用记录</title>
         <link>https://www.zhangyaoke.com/p/rabbitmq-python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</link>
         <pubDate>Wed, 09 Mar 2022 11:42:18 +0800</pubDate>
@@ -2326,72 +2392,6 @@ PS：如要下载文件，可能会导致过大文件下载失败，可以使用
 &lt;p&gt;这里的&lt;code&gt;index-url&lt;/code&gt; 后面跟上方给出的&lt;strong&gt;源地址&lt;/strong&gt;;&lt;code&gt;trusted-host&lt;/code&gt;后面跟域名，表示&lt;code&gt;https&lt;/code&gt;方式安装,新版&lt;code&gt;Ubuntu&lt;/code&gt;必须配置。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;改完后保存即可即时生效&#34;&gt;改完后保存即可，即时生效。&lt;/h3&gt;
-</description>
-        </item>
-        <item>
-        <title>屏幕流光溢彩&#43;音频律动</title>
-        <link>https://www.zhangyaoke.com/p/%E5%B1%8F%E5%B9%95%E6%B5%81%E5%85%89%E6%BA%A2%E5%BD%A9-%E9%9F%B3%E9%A2%91%E5%BE%8B%E5%8A%A8/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://www.zhangyaoke.com/p/%E5%B1%8F%E5%B9%95%E6%B5%81%E5%85%89%E6%BA%A2%E5%BD%A9-%E9%9F%B3%E9%A2%91%E5%BE%8B%E5%8A%A8/</guid>
-        <description>&lt;h2 id=&#34;硬件&#34;&gt;硬件&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;主控板&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;主控制板，用来接收信号并控制灯带，任选其一即可&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;ESP32&lt;/li&gt;
-&lt;li&gt;ESP8266&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;灯带&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;WS2812B （60灯珠1米）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;软件&#34;&gt;软件&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;WLED&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;WLED是本次项目控制灯带的主要程序，有了WLED，可以通过Web界面以及手机APP来控制灯带的颜色、亮度及效果，同时支持其他APP同步相关颜色参数。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://kno.wled.ge/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Welcome to WLED - WLED Project&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/Aircoookie/WLED&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;官方Github&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Hyperion&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;用来捕获PC屏幕颜色，同时输出相应颜色到WLED，看来达到屏幕流光溢彩的效果。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.hyperion-project.org/en/user/Installation.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Hyperion&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/hyperion-project/hyperion.ng&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;官方Github&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;LedFx&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;接收音频，并即时将音频处理成多个 LED 灯条/矩阵的实时灯光秀，对接WLED从而达到音乐节奏的光律动。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.ledfx.app/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;LedFx&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/ledfx/ledfx&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;官方Github&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
 </description>
         </item>
         
