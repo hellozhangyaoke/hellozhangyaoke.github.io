@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>闲聊 on Tiny Rick Blog</title>
+        <link>https://www.zhangyaoke.com/tags/%E9%97%B2%E8%81%8A/</link>
+        <description>Recent content in 闲聊 on Tiny Rick Blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <lastBuildDate>Wed, 14 Jun 2023 16:37:06 +0800</lastBuildDate><atom:link href="https://www.zhangyaoke.com/tags/%E9%97%B2%E8%81%8A/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>为什么开发者应该多关注海外市场</title>
+        <link>https://www.zhangyaoke.com/p/%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BC%80%E5%8F%91%E8%80%85%E5%BA%94%E8%AF%A5%E5%A4%9A%E5%85%B3%E6%B3%A8%E6%B5%B7%E5%A4%96%E5%B8%82%E5%9C%BA/</link>
+        <pubDate>Wed, 14 Jun 2023 16:37:06 +0800</pubDate>
+        
+        <guid>https://www.zhangyaoke.com/p/%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BC%80%E5%8F%91%E8%80%85%E5%BA%94%E8%AF%A5%E5%A4%9A%E5%85%B3%E6%B3%A8%E6%B5%B7%E5%A4%96%E5%B8%82%E5%9C%BA/</guid>
+        <description>&lt;h2 id=&#34;不存在足够的空间给个人小团队做独立产品存活&#34;&gt;不存在足够的空间给个人/小团队做独立产品存活&lt;/h2&gt;
+&lt;p&gt;在国内三巨头的对抗中，作为无任何资源的个人开发者，基本是无法生存的。&lt;/p&gt;
+&lt;h2 id=&#34;求验证或者叫试错成本高&#34;&gt;求验证或者叫“试错”成本高&lt;/h2&gt;
+&lt;p&gt;国内对于互联网的审查以及规定太多，备案、DNS以及各种项目审查，基本耗时都非常长，你需要不断的去针对规则修改自己的项目，试错成本或者说时间成本很高。&lt;/p&gt;
+&lt;h2 id=&#34;推广渠道少--门槛高&#34;&gt;推广渠道少 &amp;amp;&amp;amp; 门槛高&lt;/h2&gt;
+&lt;p&gt;海外市场的推广渠道更多元，比如 ProductHunt, IndieHackers, BetaList 等。这些平台不仅国内没有，我想表达的更重要一点是，这些平台用户都比较真诚和热心会实在地给你提建议，给你写反馈。国内也有几个论坛/平台，但是用户氛围和友好度就和上述几个没法比了。
+在付费推广方面，国内门槛（资质、资金）都挺高，感觉只有大品牌才能投得起广告，这对于缺资金的团队来讲，又是闭门羹。而国外，facebook 和 google 拿个 50、100 刀去做个推广计划都没问题。
+可以以非常低的成本来获取种子用户或者验证需求。&lt;/p&gt;
+&lt;h2 id=&#34;商业化选择少&#34;&gt;商业化选择少&lt;/h2&gt;
+&lt;p&gt;说商业化选择少可能说过了。国内是由于巨头间的竞争太激烈，出现各种补贴手段，导致互联网用户习惯于免费的互联网产品，甚至觉得应该倒贴给他来使用；伸手党、白 piao 党挺多；付费以及版权意识都还有改善空间。
+想想你都给哪些浏览器插件付费过？“插件还需要付钱？！”
+而海外用户的付费意愿足够强烈，在以后的案例分享中就能体会到。一个小小的浏览器插件，做得精美，触碰到了用户的购买欲望，解决了他一个痛点，他就愿意购买。&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
