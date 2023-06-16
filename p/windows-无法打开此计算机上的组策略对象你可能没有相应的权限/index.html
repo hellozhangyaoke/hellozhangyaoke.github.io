@@ -1,21 +1,33 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='将命令保存为cmd文件。
-1 2 3 4 @echo off runas /savecred /user:[域名]\administrator &amp;#34;[软件详细路径]&amp;#34; # runas /savecred /user:mgroup\zyk &amp;#34;C:\Windows\System32\CMD.exe&amp;#34; 为了脚本不被更改，需要打包成exe文件，可利用Bat To EXE Converter进行转换。'>
-<title>runas命令解决域用户需要管理员运行软件</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Windows 无法打开此计算机上的组策略对象。你可能没有相应的权限。 windows客户端出现以下错误
+解决方案 打开以下隐藏目录：
+1 C:\Windows\System32\GroupPolicy\Machine\ 如果没有GroupPolicy，Machine文件夹，都手动创建，如果有的话 清空该目录下的文件。
+如果该目录下还存在user文件夹，那么进入到user文件夹下面看看是否有文件 有的话删除即可。
+完成以上操作后即可正常打开组策略了
+​'>
+<title>Windows 无法打开此计算机上的组策略对象。你可能没有相应的权限。</title>
 
-<link rel='canonical' href='https://www.zhangyaoke.com/p/runas%E5%91%BD%E4%BB%A4%E8%A7%A3%E5%86%B3%E5%9F%9F%E7%94%A8%E6%88%B7%E9%9C%80%E8%A6%81%E7%AE%A1%E7%90%86%E5%91%98%E8%BF%90%E8%A1%8C%E8%BD%AF%E4%BB%B6/'>
+<link rel='canonical' href='https://www.zhangyaoke.com/p/windows-%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80%E6%AD%A4%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%8A%E7%9A%84%E7%BB%84%E7%AD%96%E7%95%A5%E5%AF%B9%E8%B1%A1%E4%BD%A0%E5%8F%AF%E8%83%BD%E6%B2%A1%E6%9C%89%E7%9B%B8%E5%BA%94%E7%9A%84%E6%9D%83%E9%99%90/'>
 
-<link rel="stylesheet" href="/scss/style.min.5be32ca3f6e1a997c75795c4359147cc6d4fbd34948c0acd51e31d237033978a.css"><meta property='og:title' content='runas命令解决域用户需要管理员运行软件'>
-<meta property='og:description' content='将命令保存为cmd文件。
-1 2 3 4 @echo off runas /savecred /user:[域名]\administrator &amp;#34;[软件详细路径]&amp;#34; # runas /savecred /user:mgroup\zyk &amp;#34;C:\Windows\System32\CMD.exe&amp;#34; 为了脚本不被更改，需要打包成exe文件，可利用Bat To EXE Converter进行转换。'>
-<meta property='og:url' content='https://www.zhangyaoke.com/p/runas%E5%91%BD%E4%BB%A4%E8%A7%A3%E5%86%B3%E5%9F%9F%E7%94%A8%E6%88%B7%E9%9C%80%E8%A6%81%E7%AE%A1%E7%90%86%E5%91%98%E8%BF%90%E8%A1%8C%E8%BD%AF%E4%BB%B6/'>
+<link rel="stylesheet" href="/scss/style.min.5be32ca3f6e1a997c75795c4359147cc6d4fbd34948c0acd51e31d237033978a.css"><meta property='og:title' content='Windows 无法打开此计算机上的组策略对象。你可能没有相应的权限。'>
+<meta property='og:description' content='Windows 无法打开此计算机上的组策略对象。你可能没有相应的权限。 windows客户端出现以下错误
+解决方案 打开以下隐藏目录：
+1 C:\Windows\System32\GroupPolicy\Machine\ 如果没有GroupPolicy，Machine文件夹，都手动创建，如果有的话 清空该目录下的文件。
+如果该目录下还存在user文件夹，那么进入到user文件夹下面看看是否有文件 有的话删除即可。
+完成以上操作后即可正常打开组策略了
+​'>
+<meta property='og:url' content='https://www.zhangyaoke.com/p/windows-%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80%E6%AD%A4%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%8A%E7%9A%84%E7%BB%84%E7%AD%96%E7%95%A5%E5%AF%B9%E8%B1%A1%E4%BD%A0%E5%8F%AF%E8%83%BD%E6%B2%A1%E6%9C%89%E7%9B%B8%E5%BA%94%E7%9A%84%E6%9D%83%E9%99%90/'>
 <meta property='og:site_name' content='Tiny Rick Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Windows' /><meta property='article:tag' content='系统配置' /><meta property='article:tag' content='系统工具' /><meta property='article:published_time' content='2022-03-09T11:42:18&#43;08:00'/><meta property='article:modified_time' content='2022-03-09T11:42:18&#43;08:00'/>
-<meta name="twitter:title" content="runas命令解决域用户需要管理员运行软件">
-<meta name="twitter:description" content="将命令保存为cmd文件。
-1 2 3 4 @echo off runas /savecred /user:[域名]\administrator &amp;#34;[软件详细路径]&amp;#34; # runas /savecred /user:mgroup\zyk &amp;#34;C:\Windows\System32\CMD.exe&amp;#34; 为了脚本不被更改，需要打包成exe文件，可利用Bat To EXE Converter进行转换。"><style>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Windows' /><meta property='article:tag' content='系统配置' /><meta property='article:tag' content='域控' /><meta property='article:published_time' content='2023-06-16T10:02:18&#43;08:00'/><meta property='article:modified_time' content='2023-06-16T10:02:18&#43;08:00'/>
+<meta name="twitter:title" content="Windows 无法打开此计算机上的组策略对象。你可能没有相应的权限。">
+<meta name="twitter:description" content="Windows 无法打开此计算机上的组策略对象。你可能没有相应的权限。 windows客户端出现以下错误
+解决方案 打开以下隐藏目录：
+1 C:\Windows\System32\GroupPolicy\Machine\ 如果没有GroupPolicy，Machine文件夹，都手动创建，如果有的话 清空该目录下的文件。
+如果该目录下还存在user文件夹，那么进入到user文件夹下面看看是否有文件 有的话删除即可。
+完成以上操作后即可正常打开组策略了
+​"><style>
 
     :root {
         --article-font-family: "Merriweather", var(--base-font-family);
@@ -160,16 +172,12 @@
                 服务器
             </a>
         
-            <a href="/categories/windows/" >
-                Windows
-            </a>
-        
     </header>
     
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/runas%E5%91%BD%E4%BB%A4%E8%A7%A3%E5%86%B3%E5%9F%9F%E7%94%A8%E6%88%B7%E9%9C%80%E8%A6%81%E7%AE%A1%E7%90%86%E5%91%98%E8%BF%90%E8%A1%8C%E8%BD%AF%E4%BB%B6/">runas命令解决域用户需要管理员运行软件</a>
+            <a href="/p/windows-%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80%E6%AD%A4%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%8A%E7%9A%84%E7%BB%84%E7%AD%96%E7%95%A5%E5%AF%B9%E8%B1%A1%E4%BD%A0%E5%8F%AF%E8%83%BD%E6%B2%A1%E6%9C%89%E7%9B%B8%E5%BA%94%E7%9A%84%E6%9D%83%E9%99%90/">Windows 无法打开此计算机上的组策略对象。你可能没有相应的权限。</a>
         </h2>
     
         
@@ -191,7 +199,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Mar 09, 2022</time>
+                <time class="article-time--published">Jun 16, 2023</time>
             </div>
         
 
@@ -221,28 +229,52 @@
     <section class="article-content">
     
     
-    <ol>
+    <h1 id="windows-无法打开此计算机上的组策略对象你可能没有相应的权限">Windows 无法打开此计算机上的组策略对象。你可能没有相应的权限。</h1>
+<blockquote>
+<p>windows客户端出现以下错误</p>
+</blockquote>
+<p><img src="/.%5cSnipaste_2023-06-16_09-54-25.jpg"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Snipaste_2023-06-16_09-54-25"
+	
+	
+></p>
+<h1 id="解决方案">解决方案</h1>
+<ol>
 <li>
-<p>将命令保存为cmd文件。</p>
+<p>打开以下隐藏目录：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">@echo off
-</span></span><span class="line"><span class="cl">runas /savecred /user:<span class="o">[</span>域名<span class="o">]</span><span class="se">\a</span>dministrator <span class="s2">&#34;[软件详细路径]&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># runas /savecred /user:mgroup\zyk &#34;C:\Windows\System32\CMD.exe&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">C:\Windows\System32\GroupPolicy\Machine\
 </span></span></code></pre></td></tr></table>
 </div>
-</div></li>
+</div><p>如果没有<code>GroupPolicy</code>，<code>Machine</code>文件夹，都手动创建，如果有的话 清空该目录下的文件。</p>
+</li>
 <li>
-<p>为了脚本不被更改，需要打包成exe文件，可利用Bat To EXE Converter进行转换。</p>
+<p>如果该目录下还存在<code>user</code>文件夹，那么进入到<code>user</code>文件夹下面看看是否有文件 有的话删除即可。</p>
+</li>
+<li>
+<p>完成以上操作后即可正常打开组策略了</p>
+<p><img src="/.%5cSnipaste_2023-06-16_10-02-36.jpg"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Snipaste_2023-06-16_10-02-36"
+	
+	
+></p>
 </li>
 </ol>
+<p>​</p>
 
 </section>
 
@@ -255,7 +287,7 @@
         
             <a href="/tags/%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE/">系统配置</a>
         
-            <a href="/tags/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7/">系统工具</a>
+            <a href="/tags/%E5%9F%9F%E6%8E%A7/">域控</a>
         
     </section>
 
@@ -302,6 +334,32 @@
             
                 
 <article class="">
+    <a href="/p/windows10-12%E4%BB%A3cpu%E5%A4%A7%E5%B0%8F%E6%A0%B8%E5%BF%83%E8%B0%83%E5%BA%A6%E6%9B%B4%E6%94%B9/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">WIndows10  12代CPU大小核心调度更改</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/runas%E5%91%BD%E4%BB%A4%E8%A7%A3%E5%86%B3%E5%9F%9F%E7%94%A8%E6%88%B7%E9%9C%80%E8%A6%81%E7%AE%A1%E7%90%86%E5%91%98%E8%BF%90%E8%A1%8C%E8%BD%AF%E4%BB%B6/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">runas命令解决域用户需要管理员运行软件</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/p/windows%E6%96%87%E4%BB%B6%E5%AE%A1%E6%A0%B8%E6%97%A5%E5%BF%97%E5%AE%A1%E6%A0%B8%E8%AE%B0%E5%BD%95/">
         
         
@@ -315,38 +373,12 @@
             
                 
 <article class="">
-    <a href="/p/%E9%80%9A%E8%BF%87stunnel%E9%9A%A7%E9%81%93%E5%8A%A0%E5%AF%86%E6%B5%81%E9%87%8F/">
+    <a href="/p/centos7-%E6%A0%B9%E7%9B%AE%E5%BD%95%E6%89%A9%E5%B1%95/%E6%89%A9%E5%AE%B9/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">通过Stunnel隧道加密流量</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/p/windows-%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80%E6%AD%A4%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%8A%E7%9A%84%E7%BB%84%E7%AD%96%E7%95%A5%E5%AF%B9%E8%B1%A1%E4%BD%A0%E5%8F%AF%E8%83%BD%E6%B2%A1%E6%9C%89%E7%9B%B8%E5%BA%94%E7%9A%84%E6%9D%83%E9%99%90/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Windows 无法打开此计算机上的组策略对象。你可能没有相应的权限。</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/p/windows10-12%E4%BB%A3cpu%E5%A4%A7%E5%B0%8F%E6%A0%B8%E5%BF%83%E8%B0%83%E5%BA%A6%E6%9B%B4%E6%94%B9/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">WIndows10  12代CPU大小核心调度更改</h2>
+            <h2 class="article-title">centos7 根目录扩展/扩容</h2>
         </div>
     </a>
 </article>
