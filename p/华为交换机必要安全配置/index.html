@@ -12,7 +12,7 @@
 1 2 3 4 5 6 7 &amp;lt;HUAWEIDGHWFutureMatrix&amp;gt; system-view [HUAWEIDGHWFutureMatrix] user-interface console 0 [HUAWEIDGHWFutureMatrix-ui-console0] authentication-mode aaa [HUAWEIDGHWFutureMatrix-ui-console0] quit [HUAWEIDGHWFutureMatrix] aaa [HUAWEIDGHWFutureMatrix-aaa] local-user admin1234 password irreversible-cipher Helloworld@6789 [HUAWEIDGHWFutureMatrix-aaa] local-user admin1234 service-type terminal telnet [Console 和 Telnet] 本机防攻击 1 2 3 4 5 6 7 &amp;lt;HUAWEIDGHWFutureMatrix&amp;gt; system-view [HUAWEIDGHWFutureMatrix] cpu-defend policy 1 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] car packet-type icmp cir 64 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] deny packet-type ttl-expired [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] quit [HUAWEIDGHWFutureMatrix] cpu-defend-policy 1 global [HUAWEIDGHWFutureMatrix] cpu-defend-policy 1 配置攻击溯源并进行防御 1 2 3 4 5 6 7 8 9 10 11 12 &amp;lt;HUAWEIDGHWFutureMatrix&amp;gt; system-view [HUAWEIDGHWFutureMatrix] cpu-defend policy 1 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend enable [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend attack-packet sample 5 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend threshold 50 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend trace-type source-ip source-mac source-portvlan [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend protocol arp [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend action deny timer 300 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend whitelist 1 interface gigabitethernet 1/0/0 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] quit [HUAWEIDGHWFutureMatrix] cpu-defend-policy 1 global [HUAWEIDGHWFutureMatrix] cpu-defend-policy 1 攻击防范 1 2 &amp;lt;HUAWEIDGHWFutureMatrix&amp;gt; system-view [HUAWEIDGHWFutureMatrix] anti-attack fragment enable TCP SYN泛洪攻击防范'>
 <meta property='og:url' content='https://www.zhangyaoke.com/p/%E5%8D%8E%E4%B8%BA%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%BF%85%E8%A6%81%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE/'>
 <meta property='og:site_name' content='Tiny Rick Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='华为' /><meta property='article:tag' content='H3C' /><meta property='article:tag' content='网络工程' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='华为' /><meta property='article:tag' content='H3C' /><meta property='article:tag' content='网络工程' /><meta property='article:published_time' content='2023-06-27T10:14:46&#43;08:00'/><meta property='article:modified_time' content='2023-06-27T10:14:46&#43;08:00'/>
 <meta name="twitter:title" content="华为交换机必要安全配置">
 <meta name="twitter:description" content="登录安全 配置aaa认证登录即可
 1 2 3 4 5 6 7 &amp;lt;HUAWEIDGHWFutureMatrix&amp;gt; system-view [HUAWEIDGHWFutureMatrix] user-interface console 0 [HUAWEIDGHWFutureMatrix-ui-console0] authentication-mode aaa [HUAWEIDGHWFutureMatrix-ui-console0] quit [HUAWEIDGHWFutureMatrix] aaa [HUAWEIDGHWFutureMatrix-aaa] local-user admin1234 password irreversible-cipher Helloworld@6789 [HUAWEIDGHWFutureMatrix-aaa] local-user admin1234 service-type terminal telnet [Console 和 Telnet] 本机防攻击 1 2 3 4 5 6 7 &amp;lt;HUAWEIDGHWFutureMatrix&amp;gt; system-view [HUAWEIDGHWFutureMatrix] cpu-defend policy 1 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] car packet-type icmp cir 64 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] deny packet-type ttl-expired [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] quit [HUAWEIDGHWFutureMatrix] cpu-defend-policy 1 global [HUAWEIDGHWFutureMatrix] cpu-defend-policy 1 配置攻击溯源并进行防御 1 2 3 4 5 6 7 8 9 10 11 12 &amp;lt;HUAWEIDGHWFutureMatrix&amp;gt; system-view [HUAWEIDGHWFutureMatrix] cpu-defend policy 1 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend enable [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend attack-packet sample 5 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend threshold 50 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend trace-type source-ip source-mac source-portvlan [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend protocol arp [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend action deny timer 300 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] auto-defend whitelist 1 interface gigabitethernet 1/0/0 [HUAWEIDGHWFutureMatrix-cpu-defend-policy-1] quit [HUAWEIDGHWFutureMatrix] cpu-defend-policy 1 global [HUAWEIDGHWFutureMatrix] cpu-defend-policy 1 攻击防范 1 2 &amp;lt;HUAWEIDGHWFutureMatrix&amp;gt; system-view [HUAWEIDGHWFutureMatrix] anti-attack fragment enable TCP SYN泛洪攻击防范"><style>
@@ -212,6 +212,19 @@
     
     
     <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jun 27, 2023</time>
+            </div>
         
 
         
